@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zim Athletics – Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root { --orange: #F26A1B; --orange-light: #FF8C42; }
+
+  body { font-family: 'Barlow', sans-serif; background: #fff; color: #1a1a1a; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 64px; background: #fff;
+    border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .logo {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+    font-size: 1.5rem; color: var(--orange); letter-spacing: 1px;
+    text-transform: uppercase; text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 8px; align-items: center; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: #333; font-weight: 500; font-size: 0.95rem;
+    padding: 6px 16px; border-radius: 6px; transition: background 0.2s;
+  }
+  .nav-links a:hover { background: #f5f5f5; }
+  .nav-links a.active { background: #FFF3E8; color: var(--orange); font-weight: 600; }
+  .btn-login {
+    background: var(--orange); color: #fff !important; border-radius: 8px !important;
+    font-weight: 600 !important; padding: 8px 22px !important; transition: background 0.2s !important;
+  }
+  .btn-login:hover { background: var(--orange-light) !important; }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 40px 48px 20px; display: flex;
+    align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  }
+  .page-header-left h1 { font-weight: 800; font-size: 2.6rem; color: #111; line-height: 1.1; }
+  .page-header-left p  { color: #777; font-size: 1rem; margin-top: 6px; }
+
+  .search-box {
+    display: flex; align-items: center; gap: 10px;
+    border: 1.5px solid #ddd; border-radius: 30px;
+    padding: 10px 20px; min-width: 280px; background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-box:focus-within { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(242,106,27,0.12); }
+  .search-box input {
+    border: none; outline: none; font-family: 'Barlow', sans-serif;
+    font-size: 0.95rem; color: #333; width: 100%; background: transparent;
+  }
+  .search-box input::placeholder { color: #bbb; }
+
+  /* FILTERS */
+  .filters {
+    padding: 10px 48px 24px; display: flex;
+    gap: 10px; flex-wrap: wrap; border-bottom: 1.5px solid #eee;
+  }
+  .filter-btn {
+    padding: 8px 22px; border-radius: 30px; border: 2px solid #ddd;
+    background: transparent; font-family: 'Barlow', sans-serif;
+    font-weight: 600; font-size: 0.9rem; color: #444; cursor: pointer; transition: all 0.2s;
+  }
+  .filter-btn:hover { border-color: var(--orange); color: var(--orange); }
+  .filter-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+  /* SORT BAR */
+  .sort-bar { padding: 16px 48px; display: flex; align-items: center; justify-content: space-between; }
+  .results-count { color: #888; font-size: 0.9rem; }
+  .sort-select {
+    border: 1.5px solid #ddd; border-radius: 8px; padding: 7px 14px;
+    font-family: 'Barlow', sans-serif; font-size: 0.88rem; color: #444;
+    cursor: pointer; outline: none; background: #fff;
+  }
+
+  /* PRODUCT GRID */
+  .product-grid {
+    padding: 8px 48px 60px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  }
+
+  /* CARD */
+  .product-card {
+    border-radius: 14px; overflow: hidden;
+    border: 1.5px solid #efefef; background: #fff;
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative;
+  }
+  .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+
+  /* ── IMAGE AREA ──
+     Uses background-image so local file paths work exactly like
+     events page. Set the `img` field in the products array to your
+     local path, e.g. "images/sprint-racer.jpg"
+  */
+  .product-img-wrap {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Fallback colour shown when image file is not found */
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-position 0.4s ease;
+  }
+  .product-card:hover .product-img-wrap {
+    background-position: center 55%;
+  }
+
+  /* Subtle bottom vignette so badge text stays readable */
+  .product-img-wrap::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.28) 0%, transparent 55%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Placeholder shown when no image path is provided */
+  .img-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(135deg, #f0f0f0, #e4e4e4);
+    transition: background 0.25s;
+    z-index: 0;
+  }
+  /* Hide placeholder when a real image is set */
+  .has-image .img-placeholder { display: none; }
+
+  .product-card:hover .img-placeholder {
+    background: linear-gradient(135deg, #ffe8d6, #ffd5b8);
+  }
+
+  .upload-hint {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: #bbb; font-size: 0.72rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px; text-align: center;
+    transition: color 0.2s;
+  }
+  .product-card:hover .upload-hint { color: var(--orange); }
+  .upload-hint svg { transition: transform 0.2s; }
+  .product-card:hover .upload-hint svg { transform: translateY(-3px); }
+
+  /* Badge */
+  .product-badge {
+    position: absolute; top: 10px; left: 10px; z-index: 3;
+    background: rgba(255,255,255,0.95); color: #333;
+    font-size: 0.72rem; font-weight: 600; padding: 4px 10px;
+    border-radius: 6px; text-transform: lowercase;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); letter-spacing: 0.3px;
+  }
+  .product-badge.sale { background: var(--orange); color: #fff; }
+
+  /* Wishlist */
+  .wishlist-btn {
+    position: absolute; top: 10px; right: 10px; z-index: 3;
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.95); border: none; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .product-card:hover .wishlist-btn { opacity: 1; }
+  .wishlist-btn:hover { background: #ffe5d0; }
+
+  /* PRODUCT INFO */
+  .product-info { padding: 16px 18px 18px; }
+  .product-category { font-size: 0.75rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .product-name { font-weight: 700; font-size: 1rem; color: #111; margin-bottom: 8px; line-height: 1.3; }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-price { font-weight: 700; font-size: 1.1rem; color: var(--orange); }
+  .product-price .original { font-size: 0.82rem; color: #ccc; text-decoration: line-through; margin-left: 6px; font-weight: 400; }
+  .add-btn {
+    background: var(--orange); color: #fff; border: none; border-radius: 8px;
+    padding: 7px 14px; font-family: 'Barlow', sans-serif; font-weight: 600;
+    font-size: 0.82rem; cursor: pointer; transition: background 0.2s, transform 0.15s;
+  }
+  .add-btn:hover { background: var(--orange-light); transform: scale(1.05); }
+
+  /* EMPTY STATE */
+  .empty-state { display: none; text-align: center; padding: 80px 48px; color: #bbb; }
+  .empty-state .icon { font-size: 2.5rem; margin-bottom: 14px; }
+
+  @media (max-width: 1000px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px)  {
+    .product-grid { grid-template-columns: 1fr; padding: 8px 20px 40px; }
+    .page-header, .filters, .sort-bar { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="Index.html">ZIM ATHLETICS</a>
+  <ul class="nav-links">
+    <li><a href="Index.html">Dashboard</a></li>
+    <li><a href="shop.html" class="active">Shop</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="#" class="btn-login">Login / Sign Up</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-left">
+    <h1>Shop Gear</h1>
+    <p>Premium equipment for serious athletes.</p>
+  </div>
+  <div class="search-box">
+    <svg width="18" height="18" fill="none" stroke="#aaa" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()">
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters">
+  <button class="filter-btn active" onclick="setFilter('All', this)">All</button>
+  <button class="filter-btn" onclick="setFilter('Shoes', this)">Shoes</button>
+  <button class="filter-btn" onclick="setFilter('Apparel', this)">Apparel</button>
+  <button class="filter-btn" onclick="setFilter('Accessories', this)">Accessories</button>
+  <button class="filter-btn" onclick="setFilter('Nutrition', this)">Nutrition</button>
+</div>
+
+<!-- SORT BAR -->
+<div class="sort-bar">
+  <span class="results-count" id="resultsCount">Showing 12 products</span>
+  <select class="sort-select" onchange="sortProducts(this.value)">
+    <option value="featured">Sort: Featured</option>
+    <option value="price-asc">Price: Low to High</option>
+    <option value="price-desc">Price: High to Low</option>
+    <option value="name">Name A–Z</option>
+  </select>
+</div>
+
+<!-- PRODUCT GRID -->
+<div class="product-grid" id="productGrid"></div>
+<div class="empty-state" id="emptyState">
+  <div class="icon">🔍</div>
+  <p>No products found. Try a different search or category.</p>
+</div>
+
+<script>
+/*
+  ══════════════════════════════════════════════════════════
+  IMAGE SETUP — point each product's `img` field to a file
+  inside an  images/  folder next to this HTML file, e.g.:
+
+    images/sprint-racer.jpg
+    images/water-bottle.jpg
+    ...
+
+  Any format works: .jpg  .jpeg  .png  .webp
+  Leave `img: ''` to show the grey placeholder instead.
+  ══════════════════════════════════════════════════════════
+*/
+const products = [
+  { id:1,  name:'Pro Sprint Racer X',        category:'Shoes',       price:149.99, originalPrice:null,   badge:'running shoes', sale:false, img:'images/sprint-racer.jpg'    },
+  { id:2,  name:'HydraFlow Water Bottle',     category:'Accessories', price:34.99,  originalPrice:null,   badge:'water bottles', sale:false, img:'images/water-bottle.png'    },
+  { id:3,  name:'Race Day Flask Set',         category:'Accessories', price:28.99,  originalPrice:39.99,  badge:'flasks',        sale:true,  img:'images/flask-set.jpg'       },
+  { id:4,  name:'AeroMesh Running Cap',       category:'Apparel',     price:24.99,  originalPrice:null,   badge:'caps',          sale:false, img:'images/running-cap.png'     },
+  { id:5,  name:'TrailBlazer Shoe',           category:'Shoes',       price:179.99, originalPrice:219.99, badge:'trail shoes',   sale:true,  img:'images/trail-shoe.png'      },
+  { id:6,  name:'Compression Run Tights',     category:'Apparel',     price:74.99,  originalPrice:null,   badge:'tights',        sale:false, img:'images/run-tights.png'      },
+  { id:7,  name:'Waffers ',        category:'Nutrition',   price:29.99,  originalPrice:null,   badge:'nutrition',     sale:false, img:'images/lunchbar.png'      },
+  { id:8,  name:'Sport Sunglasses',           category:'Accessories', price:89.99,  originalPrice:null,   badge:'eyewear',       sale:false, img:'images/sunglasses.jpg'      },
+  { id:9,  name:'Electrolyte Powder',         category:'Nutrition',   price:39.99,  originalPrice:49.99,  badge:'nutrition',     sale:true,  img:'images/electrolyte.png'     },
+  { id:10, name:'AeroFit Run Shorts',         category:'Apparel',     price:54.99,  originalPrice:null,   badge:'shorts',        sale:false, img:'images/run-shorts.png'      },
+  { id:11, name:'Pace Pro GPS Watch',         category:'Accessories', price:299.99, originalPrice:null,   badge:'tech',          sale:false, img:'images/watch.png'       },
+  { id:12, name:'Marathon Elite Sock 3pk',    category:'Apparel',     price:19.99,  originalPrice:null,   badge:'socks',         sale:false, img:'images/elite-socks.png'     },
+];
+
+let activeFilter = 'All';
+let activeSort   = 'featured';
+let searchQuery  = '';
+
+function setFilter(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+function sortProducts(val) {
+  activeSort = val;
+  renderProducts();
+}
+
+function filterProducts() {
+  searchQuery = document.getElementById('searchInput').value.toLowerCase();
+  renderProducts();
+}
+
+function renderProducts() {
+  let list = products.filter(p => {
+    const matchCat    = activeFilter === 'All' || p.category === activeFilter;
+    const matchSearch = p.name.toLowerCase().includes(searchQuery)
+                     || p.badge.includes(searchQuery)
+                     || p.category.toLowerCase().includes(searchQuery);
+    return matchCat && matchSearch;
+  });
+
+  if (activeSort === 'price-asc')  list.sort((a,b) => a.price - b.price);
+  else if (activeSort === 'price-desc') list.sort((a,b) => b.price - a.price);
+  else if (activeSort === 'name')  list.sort((a,b) => a.name.localeCompare(b.name));
+
+  const grid  = document.getElementById('productGrid');
+  const empty = document.getElementById('emptyState');
+  document.getElementById('resultsCount').textContent =
+    `Showing ${list.length} product${list.length !== 1 ? 's' : ''}`;
+
+  if (!list.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+
+  grid.innerHTML = list.map(p => {
+    // If an image path is provided, apply it as background-image style
+    const hasImg    = p.img && p.img.trim() !== '';
+    const bgStyle   = hasImg ? `background-image: url('${p.img}');` : '';
+    const wrapClass = hasImg ? 'product-img-wrap has-image' : 'product-img-wrap';
+
+    return `
+    <div class="product-card">
+
+      <!-- IMAGE AREA: background-image from local images/ folder -->
+      <div class="${wrapClass}" style="${bgStyle}">
+
+        <!-- Grey placeholder shown when img path is empty or file not found -->
+        <div class="img-placeholder">
+          <div class="upload-hint">
+            <svg width="30" height="30" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span>No image — add to images/</span>
+          </div>
+        </div>
+
+        <!-- Badge -->
+        <span class="product-badge${p.sale ? ' sale' : ''}" style="z-index:3;">
+          ${p.sale ? '🔥 sale' : p.badge}
+        </span>
+
+        <!-- Wishlist -->
+        <button class="wishlist-btn" onclick="event.stopPropagation()" title="Wishlist">♡</button>
+      </div>
+
+      <!-- PRODUCT INFO -->
+      <div class="product-info">
+        <p class="product-category">${p.category}</p>
+        <p class="product-name">${p.name}</p>
+        <div class="product-footer">
+          <span class="product-price">
+            $${p.price.toFixed(2)}
+            ${p.originalPrice ? `<span class="original">$${p.originalPrice.toFixed(2)}</span>` : ''}
+          </span>
+          <button class="add-btn" onclick="addToCart(event, ${p.id})">+ Add</button>
+        </div>
+      </div>
+
+    </div>`;
+  }).join('');
+}
+
+function addToCart(e, id) {
+  e.stopPropagation();
+  const btn = e.target;
+  btn.textContent      = '✓ Added';
+  btn.style.background = '#2ecc71';
+  setTimeout(() => {
+    btn.textContent      = '+ Add';
+    btn.style.background = '';
+  }, 1500);
+}
+
+renderProducts();
+</script>
+</body>
+</html>
