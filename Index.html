@@ -14,13 +14,18 @@
     --dark: #1a1a1a;
     --gray: #555;
     --white: #fff;
+    --pad-x: 80px;
   }
+
+  html { -webkit-text-size-adjust: 100%; }
 
   body {
     font-family: 'Barlow', sans-serif;
     overflow-x: hidden;
     background: #fff;
   }
+
+  img { max-width: 100%; display: block; }
 
   /* NAV */
   nav {
@@ -46,6 +51,25 @@
     text-transform: uppercase;
   }
 
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--dark);
+    border-radius: 2px;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
   .nav-links {
     display: flex;
     gap: 8px;
@@ -61,6 +85,7 @@
     padding: 6px 16px;
     border-radius: 6px;
     transition: background 0.2s;
+    white-space: nowrap;
   }
 
   .nav-links a:hover { background: #f5f5f5; }
@@ -96,25 +121,22 @@
     background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
-  .hero-img-placeholder {
+  .hero-img {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, rgba(42,42,42,0.95) 0%, rgba(80,80,80,0.7) 60%, rgba(180,180,180,0.3) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.3);
-    font-style: italic;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.55;
   }
 
   .hero-content {
     position: relative;
     z-index: 2;
-    padding: 60px 60px 60px 80px;
+    padding: 60px var(--pad-x);
     max-width: 640px;
+    width: 100%;
     animation: fadeUp 0.8s ease both;
   }
 
@@ -126,7 +148,7 @@
   .hero h1 {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
-    font-size: clamp(3rem, 6vw, 5rem);
+    font-size: clamp(2.4rem, 8vw, 5rem);
     line-height: 1.0;
     color: #fff;
     text-transform: uppercase;
@@ -141,7 +163,7 @@
 
   .hero p {
     color: rgba(255,255,255,0.85);
-    font-size: 1.05rem;
+    font-size: clamp(0.92rem, 2.2vw, 1.05rem);
     line-height: 1.65;
     max-width: 440px;
     margin-bottom: 36px;
@@ -166,6 +188,7 @@
     transition: background 0.2s, transform 0.15s;
     text-decoration: none;
     display: inline-block;
+    text-align: center;
   }
 
   .btn-primary:hover {
@@ -186,6 +209,7 @@
     transition: background 0.2s, transform 0.15s;
     text-decoration: none;
     display: inline-block;
+    text-align: center;
   }
 
   .btn-outline:hover {
@@ -196,22 +220,25 @@
   /* STATS BAR */
   .stats-bar {
     background: var(--orange);
-    padding: 28px 80px;
+    padding: 28px var(--pad-x);
     display: flex;
     justify-content: space-around;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 24px;
     animation: fadeUp 0.8s 0.3s ease both;
   }
 
   .stat {
     text-align: center;
     color: #fff;
+    flex: 1 1 120px;
+    min-width: 100px;
   }
 
   .stat-num {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
-    font-size: 2.2rem;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
     line-height: 1;
     display: block;
   }
@@ -227,7 +254,7 @@
 
   /* FEATURES */
   .features {
-    padding: 80px 80px;
+    padding: 80px var(--pad-x);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 40px;
@@ -278,13 +305,13 @@
   /* SECTION HEADER */
   .section-header {
     text-align: center;
-    padding: 60px 80px 10px;
+    padding: 60px var(--pad-x) 10px;
   }
 
   .section-header h2 {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
-    font-size: 2.8rem;
+    font-size: clamp(2rem, 5vw, 2.8rem);
     color: #1a1a1a;
     text-transform: uppercase;
   }
@@ -299,7 +326,7 @@
 
   /* PRODUCTS */
   .products {
-    padding: 40px 80px 80px;
+    padding: 40px var(--pad-x) 80px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 28px;
@@ -357,7 +384,7 @@
   /* EVENTS */
   .events-section {
     background: #f8f8f8;
-    padding: 60px 80px;
+    padding: 60px var(--pad-x);
   }
 
   .events-section .section-header {
@@ -416,6 +443,7 @@
   .event-card .event-meta {
     display: flex;
     gap: 14px;
+    flex-wrap: wrap;
     margin-top: 12px;
     font-size: 0.82rem;
     color: #aaa;
@@ -424,17 +452,18 @@
   /* CTA */
   .cta-section {
     background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-    padding: 80px;
+    padding: 80px var(--pad-x);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 40px;
   }
 
   .cta-text h2 {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
-    font-size: 3rem;
+    font-size: clamp(1.9rem, 5vw, 3rem);
     color: #fff;
     text-transform: uppercase;
     line-height: 1.05;
@@ -450,27 +479,121 @@
     line-height: 1.6;
   }
 
+  .cta-btn {
+    font-size: 1.1rem;
+    padding: 16px 40px;
+  }
+
   /* FOOTER */
   footer {
     background: #111;
-    padding: 40px 80px;
+    padding: 40px var(--pad-x);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
     color: rgba(255,255,255,0.4);
     font-size: 0.85rem;
+    text-align: center;
   }
 
   footer .logo { font-size: 1.2rem; }
 
-  @media (max-width: 768px) {
+  .footer-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footer-links a {
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+  }
+
+  /* ============ RESPONSIVE BREAKPOINTS ============ */
+
+  /* Tablets / small laptops */
+  @media (max-width: 1024px) {
+    :root { --pad-x: 48px; }
+
+    .features, .products, .events-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .hero { min-height: 460px; }
+  }
+
+  /* Tablets / large phones — nav collapses to menu */
+  @media (max-width: 860px) {
+    :root { --pad-x: 28px; }
+
+    nav { padding: 0 20px; }
+
+    .nav-toggle { display: flex; }
+
+    .nav-links {
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: #fff;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 8px 20px 16px;
+      border-bottom: 1px solid #eee;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .nav-links.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .nav-links li { width: 100%; }
+    .nav-links a { display: block; padding: 12px 10px; }
+    .btn-login { text-align: center; margin-top: 4px; }
+
+    .hero-content { padding: 48px var(--pad-x); max-width: 100%; }
+    .hero p { max-width: 100%; }
+
+    .cta-section { text-align: center; justify-content: center; }
+    .cta-text p { max-width: 100%; }
+  }
+
+  /* Phones */
+  @media (max-width: 640px) {
     .features, .products, .events-grid { grid-template-columns: 1fr; }
-    .stats-bar { padding: 20px; flex-wrap: wrap; }
-    .hero-content { padding: 40px 30px; }
-    .products, .events-section, .cta-section, footer { padding-left: 24px; padding-right: 24px; }
-    .section-header { padding: 40px 24px 10px; }
-    .features { padding: 40px 24px; }
-    .cta-section { flex-direction: column; }
+
+    .hero { min-height: auto; }
+    .hero-content { padding: 40px 20px; }
+    .hero-buttons { flex-direction: column; }
+    .hero-buttons a { width: 100%; }
+
+    .stats-bar { padding: 24px 20px; justify-content: center; gap: 20px 32px; }
+    .stat { flex: 1 1 40%; min-width: 0; }
+
+    .section-header { padding: 40px 20px 10px; }
+    .features { padding: 40px 20px; gap: 24px; }
+    .products { padding: 32px 20px 56px; }
+    .events-section { padding: 48px 20px; }
+    .events-section .section-header { text-align: center; }
+
+    .cta-section { padding: 56px 20px; }
+    .cta-btn { width: 100%; }
+
+    footer { padding: 32px 20px; flex-direction: column; text-align: center; }
+  }
+
+  /* Very small phones */
+  @media (max-width: 380px) {
+    .logo { font-size: 1.2rem; }
+    .btn-primary, .btn-outline { padding: 12px 20px; font-size: 0.92rem; }
   }
 </style>
 </head>
@@ -479,7 +602,10 @@
 <!-- NAV -->
 <nav>
   <div class="logo">ZIM ATHLETICS</div>
-  <ul class="nav-links">
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
     <li><a href="index.html" class="active">Dashboard</a></li>
     <li><a href="shop.html">Shop</a></li>
     <li><a href="events.html">Events</a></li>
@@ -489,7 +615,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-img-placeholder"> <img src="marathon3.png" alt="Description of image"></div><div>Runners on a sunny trail</div>
+  <img class="hero-img" src="marathon3.png" alt="Runners on a sunny trail">
   <div class="hero-content">
     <h1>Run Your <span>Best Mile</span> Yet.</h1>
     <p>Join the Zim Athletics community. Premium gear, exciting events, and the motivation you need to cross the finish line.</p>
@@ -588,7 +714,7 @@
     <p>Join thousands of runners across Zimbabwe who trust Zim Athletics for their gear, training, and events.</p>
   </div>
   <div>
-    <a href="#" class="btn-primary" style="font-size:1.1rem; padding:16px 40px;">Create Free Account</a>
+    <a href="#" class="btn-primary cta-btn">Create Free Account</a>
   </div>
 </section>
 
@@ -596,12 +722,27 @@
 <footer>
   <div class="logo">ZIM ATHLETICS</div>
   <p>© 2026 Zim Athletics. All rights reserved.</p>
-  <div style="display:flex; gap:20px;">
-    <a href="#" style="color:rgba(255,255,255,0.4); text-decoration:none;">Privacy</a>
-    <a href="#" style="color:rgba(255,255,255,0.4); text-decoration:none;">Terms</a>
-    <a href="#" style="color:rgba(255,255,255,0.4); text-decoration:none;">Contact</a>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
   </div>
 </footer>
+
+<script>
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', function () {
+    var isOpen = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  navLinks.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
 
 </body>
 </html>
